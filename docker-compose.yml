@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: 8081
+      SPRING_MONGODB_URI: mongodb+srv://nguyenhung2004200_db_user:W87UoUWquGGfbjXv@cluster1.gypblkl.mongodb.net/userdb?retryWrites=true&w=majority
+      SPRING_MONGODB_DATABASE: userdb
+      RABBITMQ_HOST: kingfisher.lmq.cloudamqp.com
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: mwdpomue
+      RABBITMQ_PASSWORD: DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06
+      RABBITMQ_VHOST: mwdpomue
+      JWT_SECRET: your_super_secret_key_123456789
+      JWT_EXPIRATION: 86400000
+      DEFAULT_ADMIN_ENABLED: true
+      DEFAULT_ADMIN_FULL_NAME: System Admin
+      DEFAULT_ADMIN_EMAIL: admin@movie.com
+      DEFAULT_ADMIN_PASSWORD: Admin@123456
+
+  mongo:
+    image: mongo:8
+    container_name: user-service-mongo-local
+    profiles:
+      - local-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

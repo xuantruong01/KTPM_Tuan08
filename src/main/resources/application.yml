@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: user-service
+
+  mongodb:
+    uri: ${SPRING_MONGODB_URI:mongodb+srv://nguyenhung2004200_db_user:W87UoUWquGGfbjXv@cluster1.gypblkl.mongodb.net/userdb?retryWrites=true&w=majority}
+    database: ${SPRING_MONGODB_DATABASE:userdb}
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06@kingfisher.lmq.cloudamqp.com/mwdpomue}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:mwdpomue}
+    password: ${RABBITMQ_PASSWORD:DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06}
+    virtual-host: ${RABBITMQ_VHOST:mwdpomue}
+    ssl:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8081}
+
+jwt:
+  secret: ${JWT_SECRET:your_super_secret_key_123456789}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+app:
+  default-admin:
+    enabled: ${DEFAULT_ADMIN_ENABLED:true}
+    full-name: ${DEFAULT_ADMIN_FULL_NAME:System Admin}
+    email: ${DEFAULT_ADMIN_EMAIL:admin@movie.com}
+    password: ${DEFAULT_ADMIN_PASSWORD:Admin@123456}
+
+logging:
+  level:
+    com.movie.userservice: INFO
