@@ -3,7 +3,7 @@ spring:
     name: user-service
 
   mongodb:
-    uri: ${SPRING_MONGODB_URI:mongodb+srv://nguyenhung2004200_db_user:W87UoUWquGGfbjXv@cluster1.gypblkl.mongodb.net/userdb?retryWrites=true&w=majority}
+    uri: "mongodb+srv://nguyenhung2004200_db_user:W87UoUWquGGfbjXv@cluster1.gypblkl.mongodb.net/userdb?retryWrites=true&w=majority"
     database: ${SPRING_MONGODB_DATABASE:userdb}
 
   rabbitmq:
@@ -19,7 +19,7 @@ server:
   port: ${SERVER_PORT:8081}
 
 jwt:
-  secret: ${JWT_SECRET:your_super_secret_key_123456789}
+  secret: ${JWT_SECRET:your_super_secret_key_1234567890123456}
   expiration: ${JWT_EXPIRATION:86400000}
 
 app:
@@ -32,3 +32,4 @@ app:
 logging:
   level:
     com.movie.userservice: INFO
+    com.movie.userservice.security: DEBUG

@@ -4,19 +4,21 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.SecretKey;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
+    
     private final SecretKey secretKey;
     private final long expirationMs;
 
@@ -24,22 +26,19 @@ public class JwtService {
         @Value("${jwt.secret}") String secret,
         @Value("${jwt.expiration}") long expirationMs
     ) {
-        this.secretKey = Keys.hmacShaKeyFor(toSecureKey(secret));
+        // Sử dụng trực tiếp secret key, không hash
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMs = expirationMs;
-    }
-
-    private byte[] toSecureKey(String secret) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            return digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-        } catch (NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("SHA-256 algorithm not available", ex);
-        }
+        
+        logger.info("=== JWT Service Initialized ===");
+        logger.info("Secret: {}", secret);
+        logger.info("Expiration: {} ms", expirationMs);
+        logger.info("===============================");
     }
 
     public String generateToken(String subject, Map<String, Object> claims) {
         Instant now = Instant.now();
-        return Jwts
+        String token = Jwts
             .builder()
             .claims(claims)
             .subject(subject)
@@ -47,6 +46,10 @@ public class JwtService {
             .expiration(Date.from(now.plusMillis(expirationMs)))
             .signWith(secretKey)
             .compact();
+        
+        logger.debug("Token generated for subject: {}", subject);
+        
+        return token;
     }
 
     public String extractUsername(String token) {
@@ -67,11 +70,22 @@ public class JwtService {
     }
 
     private Claims extractClaims(String token) {
-        return Jwts
-            .parser()
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(token)
-            .getPayload();
+        try {
+            logger.debug("Verifying token signature...");
+            
+            Claims claims = Jwts
+                .parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+            
+            logger.debug("Token verified successfully");
+            
+            return claims;
+        } catch (Exception e) {
+            logger.error("Token verification failed: {}", e.getMessage());
+            throw e;
+        }
     }
 }
