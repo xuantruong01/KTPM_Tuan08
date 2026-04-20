@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -36,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private final UserEventPublisher userEventPublisher;
 
     @Override
-    @Transactional
     public ApiMessageResponse register(RegisterRequest request) {
         String normalizedEmail = normalizeEmail(request.email());
 

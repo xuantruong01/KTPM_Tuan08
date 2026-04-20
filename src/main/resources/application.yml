@@ -7,19 +7,19 @@ spring:
     database: ${SPRING_MONGODB_DATABASE:userdb}
 
   rabbitmq:
-    host: ${RABBITMQ_HOST:DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06@kingfisher.lmq.cloudamqp.com/mwdpomue}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:mwdpomue}
-    password: ${RABBITMQ_PASSWORD:DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06}
-    virtual-host: ${RABBITMQ_VHOST:mwdpomue}
+    host: kingfisher.lmq.cloudamqp.com
+    port: 5672
+    username: mwdpomue
+    password: DI1u8Xz2UHOWm1yqlxmZCz7H40MDCe06
+    virtual-host: mwdpomue
     ssl:
       enabled: true
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: 8081
 
 jwt:
-  secret: ${JWT_SECRET:your_super_secret_key_1234567890123456}
+  secret: ${JWT_SECRET:your_super_secret_key_123456789}
   expiration: ${JWT_EXPIRATION:86400000}
 
 app:
@@ -32,4 +32,3 @@ app:
 logging:
   level:
     com.movie.userservice: INFO
-    com.movie.userservice.security: DEBUG
